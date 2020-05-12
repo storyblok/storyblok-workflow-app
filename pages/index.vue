@@ -12,16 +12,16 @@
     />
 
     <div v-if="hasData">
-      <div class="min-h-screen flex overflow-x-scroll py-12">
+      <div class="min-h-screen flex overflow-x-scroll">
         <div
           v-for="stage in workflowStages"
-          :key="stage.title"
+          :key="stage.id"
           class="bg-gray-100 rounded-lg px-3 py-3 column-width rounded mr-4"
         >
           <p
             class="text-gray-700 font-semibold font-sans tracking-wide text-sm"
           >
-            {{ column.title }}
+            {{ stage.name }}
           </p>
         </div>
       </div>
@@ -71,7 +71,7 @@ export default {
         .get(url)
         .then((response) => {
           this.loading = false
-          console.log(response)
+          this.workflowStages = response.data.workflow_stages || []
         })
         .catch(() => {
           this.loading = false
