@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-6">
+  <div class="bg-white p-6 min-h-screen">
     <Message
       v-if="loading"
       message="Loading Workflow Stages..."
@@ -35,6 +35,7 @@
             v-for="story in stage.stories"
             :key="story.id"
             :story="story"
+            :stage-color="stage.color"
             class="mt-3 cursor-move"
           />
         </div>
