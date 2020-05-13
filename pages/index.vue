@@ -1,14 +1,14 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-white min-h-screen flex flex-col">
     <div
       v-if="loading"
-      class="min-h-screen flex justify-center items-center"
+      class="flex flex-1 justify-center items-center"
     >
       <Loading message="Loading Workflow Stages..." />
     </div>
 
     <template v-else>
-      <div class="min-h-screen p-6 flex overflow-x-scroll">
+      <div class="flex-1 p-6 flex overflow-x-scroll">
         <div
           v-if="!hasData"
           class="flex justify-center items-center"
@@ -28,17 +28,20 @@
         </template>
       </div>
     </template>
+
+    <AppFooter />
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import AppFooter from '@/components/AppFooter'
 import Loading from '@/components/Loading'
 import BoardColumn from '@/components/BoardColumn'
 
 export default {
   name: 'IndexPage',
-  components: { Loading, BoardColumn },
+  components: { AppFooter, Loading, BoardColumn },
   data: () => ({
     spaceId: null,
     loading: true,
