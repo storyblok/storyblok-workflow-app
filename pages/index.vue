@@ -8,25 +8,24 @@
     </div>
 
     <template v-else>
-      <div
-        v-if="loading"
-        class="min-h-screen flex justify-center items-center"
-      >
-        <Message
+      <div class="min-h-screen p-6 flex overflow-x-scroll">
+        <div
           v-if="!hasData"
-          type="info"
-          message="There are no workflow stages configured"
-        />
-      </div>
+          class="flex justify-center items-center"
+        >
+          <Message
+            type="info"
+            message="There are no workflow stages configured"
+          />
+        </div>
 
-      <div v-if="hasData" class="p-6">
-        <div class="min-h-screen flex overflow-x-scroll">
+        <template v-else>
           <BoardColumn
             v-for="stage in workflowsProcessed"
             :key="stage.id"
             :stage="stage"
           />
-        </div>
+        </template>
       </div>
     </template>
   </div>

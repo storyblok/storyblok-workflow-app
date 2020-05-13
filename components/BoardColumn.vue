@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-300 rounded-lg px-3 py-3 column-width rounded mr-4 shadow column-width">
+  <div class="bg-gray-300 rounded-lg px-3 py-3 rounded mr-4 shadow column-width">
     <p
       class="text-gray-700 font-semibold font-sans tracking-wide text-sm"
     >
