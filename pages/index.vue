@@ -1,57 +1,45 @@
 <template>
-  <div class="bg-white p-6 min-h-screen">
-    <Message
+  <div class="bg-white">
+    <div
       v-if="loading"
-      message="Loading Workflow Stages..."
-    />
+      class="min-h-screen flex justify-center items-center"
+    >
+      <Loading message="Loading Workflow Stages..." />
+    </div>
 
-    <Message
-      v-if="!hasData"
-      type="info"
-      message="There are no workflow stages configured"
-    />
+    <template v-else>
+      <div
+        v-if="loading"
+        class="min-h-screen flex justify-center items-center"
+      >
+        <Message
+          v-if="!hasData"
+          type="info"
+          message="There are no workflow stages configured"
+        />
+      </div>
 
-    <div v-if="hasData">
-      <Message
-        v-if="storiesWithoutStage > 0"
-        :message="`There are ${storiesWithoutStage} stories without stage`"
-        type="info"
-        class="mb-4"
-      />
-
-      <div class="min-h-screen flex overflow-x-scroll">
-        <div
-          v-for="stage in workflowsProcessed"
-          :key="stage.id"
-          class="bg-gray-300 rounded-lg px-3 py-3 column-width rounded mr-4 shadow column-width"
-        >
-          <p
-            class="text-gray-700 font-semibold font-sans tracking-wide text-sm"
-          >
-            {{ stage.name }}
-          </p>
-
-          <StoryCard
-            v-for="story in stage.stories"
-            :key="story.id"
-            :story="story"
-            :stage-color="stage.color"
-            class="mt-3 cursor-move"
+      <div v-if="hasData" class="p-6">
+        <div class="min-h-screen flex overflow-x-scroll">
+          <BoardColumn
+            v-for="stage in workflowsProcessed"
+            :key="stage.id"
+            :stage="stage"
           />
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import Message from '@/components/Message'
-import StoryCard from '@/components/StoryCard'
+import Loading from '@/components/Loading'
+import BoardColumn from '@/components/BoardColumn'
 
 export default {
   name: 'IndexPage',
-  components: { Message, StoryCard },
+  components: { Loading, BoardColumn },
   data: () => ({
     spaceId: null,
     loading: true,
@@ -62,14 +50,6 @@ export default {
   computed: {
     hasData () {
       return this.workflowsProcessed.length > 0 && !this.error && !this.loading
-    },
-    storiesInStage () {
-      return this.workflowsProcessed.reduce((acc, workflow) => {
-        return acc + workflow.stories.length
-      }, 0)
-    },
-    storiesWithoutStage () {
-      return this.stories.length - this.storiesInStage
     }
   },
   mounted () {
@@ -79,10 +59,13 @@ export default {
       this.loadSpaceIdFromUrl()
 
       this.$nextTick(async () => {
+        this.loading = true
         const workflows = await this.loadWorkflowStages()
         const stories = await this.loadStories()
 
         this.processStories(workflows, stories)
+
+        this.loading = false
       })
     }
   },
@@ -91,20 +74,16 @@ export default {
       this.spaceId = this.$route.query.space_id || null
     },
     loadWorkflowStages () {
-      this.loading = true
-
       const url = `/auth/explore/spaces/${this.spaceId}/workflow_stages`
 
       return axios
         .get(url)
         .then((response) => {
-          this.loading = false
           const workflowStages = response.data.workflow_stages || []
 
           return Promise.resolve(workflowStages)
         })
         .catch(() => {
-          this.loading = false
           this.error = true
         })
     },
@@ -114,7 +93,6 @@ export default {
       return axios
         .get(url)
         .then((response) => {
-          this.loading = false
           this.stories = response.data.stories
 
           return Promise.resolve(this.stories)
@@ -147,9 +125,5 @@ export default {
 }
 </script>
 
-<style scoped>
-.column-width {
-  min-width: 320px;
-  width: 320px;
-}
+<style>
 </style>
