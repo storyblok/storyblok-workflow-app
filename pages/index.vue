@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white min-h-screen flex flex-col">
+  <div class="bg-white py-6 min-h-screen flex flex-col">
     <div
       v-if="loading"
       class="flex flex-1 justify-center items-center"
@@ -8,7 +8,7 @@
     </div>
 
     <template v-else>
-      <div class="flex-1 p-6 flex overflow-x-scroll">
+      <div class="flex-1 px-6 mb-6 flex overflow-x-scroll">
         <div
           v-if="!hasData"
           class="flex justify-center items-center"
@@ -24,6 +24,7 @@
             v-for="stage in workflowsProcessed"
             :key="stage.id"
             :stage="stage"
+            :space-id="spaceId"
           />
         </template>
       </div>

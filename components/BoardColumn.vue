@@ -7,12 +7,13 @@
     </p>
 
     <Draggable
-      v-model="stage.stories"
+      :list="stories"
+      @change="onChange"
       ghost-class="ghost-card"
       group="stories"
     >
       <StoryCard
-        v-for="story in stage.stories"
+        v-for="story in stories"
         :key="story.id"
         :story="story"
         :stage-color="stage.color"
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Draggable from 'vuedraggable'
 import StoryCard from '@/components/StoryCard'
 
@@ -33,6 +35,10 @@ export default {
     stage: {
       type: Object,
       default: () => ({})
+    },
+    spaceId: {
+      type: [Number, String],
+      default: null
     }
   },
   computed: {
@@ -41,6 +47,35 @@ export default {
     },
     stageName () {
       return this.stage.name
+    },
+    stories () {
+      return this.stage.stories
+    }
+  },
+  methods: {
+    onChange (data) {
+      if (data.added) {
+        const story = data.added.element || {}
+        this.updateWorkflowStage(story)
+      }
+    },
+    updateWorkflowStage (story) {
+      const url = `/auth/explore/spaces/${this.spaceId}/workflow_stage_changes`
+
+      const data = {
+        workflow_stage_change: {
+          story_id: story.id,
+          workflow_stage_id: this.stageId
+        }
+      }
+
+      return axios.post(url, data)
+        .then(() => {
+          console.log(`Story ${story.id} updated to stage id ${this.stageId}`)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     }
   }
 }
