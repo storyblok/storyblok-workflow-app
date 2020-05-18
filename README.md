@@ -16,6 +16,9 @@ Firstly, to create an app on Storyblok, you need to enter to the [our partner pr
 # clone this repository
 $ git clone https://github.com/storyblok/storyblok-workflow-app.git
 
+# Enter the directory
+$ cd storyblok-workflow-app
+
 # install dependencies
 $ yarn install # npm install
 ```
