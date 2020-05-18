@@ -23,16 +23,19 @@ $ cd storyblok-workflow-app
 $ yarn install # npm install
 ```
 
-### Working on App in Development
+### Configure the the Oauth2 module
 
-To run the project in development, firstly, you need to configure our `nuxt-auth` module ([check out the documentation](https://github.com/storyblok/nuxt-auth)) with your oauth credentials (these credentials will be available on App Settings).
+To run the project in development, firstly, you need to configure our `nuxt-auth` module ([check out the documentation](https://github.com/storyblok/nuxt-auth)) with your oauth credentials (these credentials are available in the app settings area of Storyblok).
 
-After this, you need to set the oauth URLs:
+Rename the file `.env-example` to `.env` and fill out the variables.
 
-* `Url to your app` field: `<APP_URL>/auth/connect/storyblok`
-* `Oauth2 callback url` field: `<APP_URL>/auth/callback` (this URL must be include in `redirect_uri` property in `nuxt-auth` module)
+~~~text
+CONFIDENTIAL_CLIENT_ID="Id from Storyblok App"
+CONFIDENTIAL_CLIENT_SECRET="Secret from Storyblok App"
+CONFIDENTIAL_CLIENT_REDIRECT_URI=https://YOUR_ID.ngrok.io/auth/callback
+~~~
 
-### Setup a SSH Environment
+### Setup an SSL tunnel
 
 We recommend you to use [ngrok](https://ngrok.com/) to create a tunel to your development environment. In you terminal, execute:
 
@@ -40,17 +43,20 @@ We recommend you to use [ngrok](https://ngrok.com/) to create a tunel to your de
 $ ngrok http 3000 # the 3000 port is the Nuxt default
 ```
 
-Use the ngrok URL in the previous fields (app URL, oauth callback URL)
+Use the urls you get from ngrok to fill out the following fields in the app settings area in Storyblok:
+
+* `Url to your app` field: `https://YOUR_ID.ngrok.io/auth/connect/storyblok`
+* `Oauth2 callback url` field: `https://YOUR_ID.ngrok.io/auth/callback` (this URL must be include in `redirect_uri` property in `nuxt-auth` module)
 
 ### Check the App in Development
 
-After all, start the Nuxt dev server in yout terminal,
+After all, start the Nuxt dev server:
 
 ```bash
 $ yarn dev # npm run dev
 ```
 
-And go to the a specific space on Storyblok and install the App in its space.
+Now click the "Open" button in the app settings area of your app in Storyblok to install the app on a space.
 
 ### Deploy
 
