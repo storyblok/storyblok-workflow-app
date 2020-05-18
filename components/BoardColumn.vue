@@ -8,7 +8,10 @@
 
     <Draggable
       :list="stories"
+      :animation="200"
       @change="onChange"
+      tag="div"
+      class="h-full"
       ghost-class="ghost-card"
       group="stories"
     >
