@@ -8,15 +8,29 @@
     </div>
 
     <template v-else>
+      <p
+        v-if="hasCurrentUser"
+        class="px-6 mb-6"
+      >
+        Welcome, <span class="text-teal-700">{{ userName }}</span>! This is a Kanban to manager workflow stages for your stories.
+      </p>
+
       <div class="flex-1 px-6 mb-6 flex overflow-x-scroll">
         <div
           v-if="!hasData"
-          class="flex justify-center items-center w-full"
+          class="flex justify-center items-center flex-col w-full"
         >
           <Message
             type="info"
             message="There are no workflow stages configured"
           />
+
+          <button
+            @click="loadData"
+            class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mt-4"
+          >
+            Reload
+          </button>
         </div>
 
         <template v-else>
@@ -47,13 +61,32 @@ export default {
   data: () => ({
     spaceId: null,
     loading: true,
-    error: false,
+    hasUserError: false,
+    hasStoriesError: false,
+    hasWorkflowError: false,
     stories: [],
-    workflowsProcessed: []
+    workflowsProcessed: [],
+    currentUser: {}
   }),
   computed: {
     hasData () {
-      return this.workflowsProcessed.length > 0 && !this.error && !this.loading
+      return this.workflowsProcessed.length > 0 && !this.hasError && !this.loading
+    },
+    hasError () {
+      return this.hasUserError || this.hasStoriesError || this.hasWorkflowError
+    },
+    hasCurrentUser () {
+      return Object.values(this.currentUser).length > 0
+    },
+    userData () {
+      return this.hasCurrentUser ? this.currentUser.user : {}
+    },
+    userName () {
+      if (this.hasCurrentUser) {
+        return this.userData.friendly_name || ''
+      }
+
+      return ''
     }
   },
   mounted () {
@@ -62,20 +95,24 @@ export default {
     } else {
       this.loadSpaceIdFromUrl()
 
-      this.$nextTick(async () => {
-        this.loading = true
-        const workflows = await this.loadWorkflowStages()
-        const stories = await this.loadStories()
-
-        this.processStories(workflows, stories)
-
-        this.loading = false
-      })
+      this.$nextTick(this.loadData)
     }
   },
   methods: {
     loadSpaceIdFromUrl () {
       this.spaceId = this.$route.query.space_id || null
+    },
+    async loadData () {
+      this.clearErrors()
+
+      this.loading = true
+      const workflows = await this.loadWorkflowStages()
+      const stories = await this.loadStories()
+      await this.getUserInfo()
+
+      this.processStories(workflows, stories)
+
+      this.loading = false
     },
     loadWorkflowStages () {
       const url = `/auth/explore/spaces/${this.spaceId}/workflow_stages`
@@ -83,12 +120,13 @@ export default {
       return axios
         .get(url)
         .then((response) => {
-          const workflowStages = response.data.workflow_stages || []
+          this.hasWorkflowError = false
+          const workflowStages = response.data.data.workflow_stages || []
 
           return Promise.resolve(workflowStages)
         })
         .catch(() => {
-          this.error = true
+          this.hasWorkflowError = true
         })
     },
     loadStories () {
@@ -97,12 +135,13 @@ export default {
       return axios
         .get(url)
         .then((response) => {
-          this.stories = response.data.stories
+          this.hasUserError = false
+          this.stories = response.data.data.stories
 
           return Promise.resolve(this.stories)
         })
         .catch(() => {
-          this.error = true
+          this.hasUserError = true
         })
     },
     processStories (workflows = [], stories = []) {
@@ -124,6 +163,23 @@ export default {
       }
 
       this.workflowsProcessed = Object.values(workflowsProcessed)
+    },
+    getUserInfo () {
+      return axios
+        .get('/auth/user')
+        .then((response) => {
+          this.hasUserError = false
+          this.currentUser = response.data.data
+        })
+        .catch((err) => {
+          this.hasUserError = true
+          console.error(err) // eslint-disable-line
+        })
+    },
+    clearErrors () {
+      this.hasUserError = false
+      this.hasStoriesError = false
+      this.hasWorkflowError = false
     }
   }
 }

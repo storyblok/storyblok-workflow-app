@@ -71,10 +71,10 @@ export default {
 
       return axios.post(url, data)
         .then(() => {
-          console.log(`Story ${story.id} updated to stage id ${this.stageId}`)
+          console.log(`Story ${story.id} updated to stage id ${this.stageId}`) // eslint-disable-line
         })
         .catch((err) => {
-          console.error(err)
+          console.error(err) // eslint-disable-line
         })
     }
   }
