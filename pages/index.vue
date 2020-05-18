@@ -11,7 +11,7 @@
       <div class="flex-1 px-6 mb-6 flex overflow-x-scroll">
         <div
           v-if="!hasData"
-          class="flex justify-center items-center"
+          class="flex justify-center items-center w-full"
         >
           <Message
             type="info"
@@ -37,12 +37,13 @@
 <script>
 import axios from 'axios'
 import AppFooter from '@/components/AppFooter'
+import Message from '@/components/Message'
 import Loading from '@/components/Loading'
 import BoardColumn from '@/components/BoardColumn'
 
 export default {
   name: 'IndexPage',
-  components: { AppFooter, Loading, BoardColumn },
+  components: { AppFooter, BoardColumn, Loading, Message },
   data: () => ({
     spaceId: null,
     loading: true,

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="typeClass"
-    class="py-4 px-6 border border-2 text-center"
+    class="py-4 px-6 border border-2 text-center text-lg"
   >
     <p>
       {{ message }}
