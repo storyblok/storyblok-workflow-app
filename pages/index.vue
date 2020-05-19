@@ -12,7 +12,7 @@
         v-if="hasCurrentUser"
         class="px-6 mb-6"
       >
-        Welcome, <span class="text-teal-700">{{ userName }}</span>! This is a Kanban to manager workflow stages for your stories.
+        Welcome <span class="text-teal-700">{{ userName }}</span> to the workflow manager app.
       </p>
 
       <div class="flex-1 px-6 mb-6 flex">
