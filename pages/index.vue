@@ -121,7 +121,7 @@ export default {
         .get(url)
         .then((response) => {
           this.hasWorkflowError = false
-          const workflowStages = response.data.data.workflow_stages || []
+          const workflowStages = response.data.workflow_stages || []
 
           return Promise.resolve(workflowStages)
         })
@@ -136,7 +136,7 @@ export default {
         .get(url)
         .then((response) => {
           this.hasUserError = false
-          this.stories = response.data.data.stories
+          this.stories = response.data.stories
 
           return Promise.resolve(this.stories)
         })
@@ -169,7 +169,7 @@ export default {
         .get('/auth/user')
         .then((response) => {
           this.hasUserError = false
-          this.currentUser = response.data.data
+          this.currentUser = response.data
         })
         .catch((err) => {
           this.hasUserError = true
