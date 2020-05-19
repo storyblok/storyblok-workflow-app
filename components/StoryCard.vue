@@ -11,6 +11,7 @@
       <img
         :src="avatarUrl"
         :alt="`Last author ${lastAuthor.friendly_name}`"
+        v-if="lastAuthor.avatar"
         class="w-8 h-8 rounded-full"
       >
     </div>

@@ -107,10 +107,10 @@ export default {
 
       this.loading = true
       const workflows = await this.loadWorkflowStages()
-      const stories = await this.loadStories()
+      this.stories = await this.loadStories()
       await this.getUserInfo()
 
-      this.processStories(workflows, stories)
+      this.processStories(workflows, this.stories)
 
       this.loading = false
     },
@@ -129,20 +129,28 @@ export default {
           this.hasWorkflowError = true
         })
     },
-    loadStories () {
+    async loadStories () {
+      const perPage = 25
       const url = `/auth/explore/spaces/${this.spaceId}/stories`
+      let page = 1
 
-      return axios
-        .get(url)
-        .then((response) => {
-          this.hasUserError = false
-          this.stories = response.data.stories
+      let res = await axios.get(url, { page })
+      const total = res.data.total
+      const lastPage = Math.ceil((total / perPage))
+      let all = res.data.stories
 
-          return Promise.resolve(this.stories)
-        })
-        .catch(() => {
-          this.hasUserError = true
-        })
+      while (page < lastPage) {
+        page++
+        res = await axios.get(url, { page })
+        all = [
+          ...all,
+          ...res.data.stories
+        ]
+      }
+
+      this.hasUserError = false
+
+      return all
     },
     processStories (workflows = [], stories = []) {
       const workflowsProcessed = workflows.reduce((acc, workflow) => {
