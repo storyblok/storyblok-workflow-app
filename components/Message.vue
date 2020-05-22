@@ -1,7 +1,8 @@
 <template>
   <div
     :class="typeClass"
-    class="py-4 px-6 border border-2 text-center text-lg"
+    class="py-4 px-6 border border-t-4 rounded-b text-center text-lg shadow-md"
+    role="alert"
   >
     <p>
       {{ message }}
@@ -24,11 +25,9 @@ export default {
   },
   computed: {
     typeClass () {
-      if (this.type === 'danger') {
-        return 'border-red-500 text-red-500'
-      }
+      const colorBase = this.type === 'danger' ? 'red' : 'blue'
 
-      return 'border-blue-500 text-blue-500'
+      return `border-${colorBase}-700 bg-${colorBase}-100 text-${colorBase}-900`
     }
   }
 }

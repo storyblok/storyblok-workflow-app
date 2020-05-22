@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Draggable from 'vuedraggable'
 import StoryCard from '@/components/StoryCard'
 
@@ -63,22 +62,7 @@ export default {
       }
     },
     updateWorkflowStage (story) {
-      const url = `/auth/explore/spaces/${this.spaceId}/workflow_stage_changes`
-
-      const data = {
-        workflow_stage_change: {
-          story_id: story.id,
-          workflow_stage_id: this.stageId
-        }
-      }
-
-      return axios.post(url, data)
-        .then(() => {
-          console.log(`Story ${story.id} updated to stage id ${this.stageId}`) // eslint-disable-line
-        })
-        .catch((err) => {
-          console.error(err) // eslint-disable-line
-        })
+      this.$emit('update', this.stageId, story)
     }
   }
 }
