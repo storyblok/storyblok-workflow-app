@@ -8,14 +8,19 @@
     </div>
 
     <template v-else>
-      <p
-        v-if="hasCurrentUser"
-        class="px-6 mb-6"
-      >
-        Welcome <span class="text-teal-700">{{ userName }}</span> to the workflow manager app.
-      </p>
+      <div class="px-6 mb-6">
+        <p v-if="hasCurrentUser">
+          Welcome <span class="text-teal-700">{{ userName }}</span> to the workflow manager app.
+        </p>
 
-      <div class="flex-1 px-6 mb-6 flex">
+        <Checkbox
+          v-model="onlyAssignedToMe"
+          label="View only stories assigned to me"
+          class="mt-2"
+        />
+      </div>
+
+      <div class="flex-1 px-6 mb-6 flex overflow-x-scroll">
         <div
           v-if="!hasData"
           class="flex justify-center items-center flex-col w-full"
@@ -54,10 +59,11 @@ import AppFooter from '@/components/AppFooter'
 import Message from '@/components/Message'
 import Loading from '@/components/Loading'
 import BoardColumn from '@/components/BoardColumn'
+import Checkbox from '@/components/Checkbox'
 
 export default {
   name: 'IndexPage',
-  components: { AppFooter, BoardColumn, Loading, Message },
+  components: { AppFooter, BoardColumn, Loading, Message, Checkbox },
   data: () => ({
     spaceId: null,
     loading: true,
@@ -66,7 +72,8 @@ export default {
     hasWorkflowError: false,
     stories: [],
     workflowsProcessed: [],
-    currentUser: {}
+    currentUser: {},
+    onlyAssignedToMe: true
   }),
   computed: {
     hasData () {
@@ -88,6 +95,9 @@ export default {
 
       return ''
     }
+  },
+  watch: {
+    onlyAssignedToMe: 'loadData'
   },
   mounted () {
     if (window.top === window.self) {
@@ -134,14 +144,14 @@ export default {
       const url = `/auth/explore/spaces/${this.spaceId}/stories`
       let page = 1
 
-      let res = await axios.get(url, { params: { page } })
+      let res = await axios.get(url, this.getStoriesConfig(page))
       const total = res.data.total
       const lastPage = Math.ceil((total / perPage))
       let all = res.data.stories
 
       while (page < lastPage) {
         page++
-        res = await axios.get(url, { params: { page } })
+        res = await axios.get(url, this.getStoriesConfig(page))
         all = [
           ...all,
           ...res.data.stories
@@ -188,6 +198,17 @@ export default {
       this.hasUserError = false
       this.hasStoriesError = false
       this.hasWorkflowError = false
+    },
+    getStoriesConfig (page) {
+      const params = {
+        page
+      }
+
+      if (this.onlyAssignedToMe) {
+        params.mine = true
+      }
+
+      return { params }
     }
   }
 }
