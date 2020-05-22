@@ -134,14 +134,14 @@ export default {
       const url = `/auth/explore/spaces/${this.spaceId}/stories`
       let page = 1
 
-      let res = await axios.get(url, { page })
+      let res = await axios.get(url, { params: { page } })
       const total = res.data.total
       const lastPage = Math.ceil((total / perPage))
       let all = res.data.stories
 
       while (page < lastPage) {
         page++
-        res = await axios.get(url, { page })
+        res = await axios.get(url, { params: { page } })
         all = [
           ...all,
           ...res.data.stories
