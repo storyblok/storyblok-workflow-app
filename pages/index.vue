@@ -1,5 +1,11 @@
 <template>
   <div class="bg-white py-6 min-h-screen flex flex-col">
+    <Toast
+      ref="toast"
+      type="danger"
+      message="You are not allowed to move this content item to this stage"
+    />
+
     <div
       v-if="loading"
       class="flex flex-1 justify-center items-center"
@@ -8,28 +14,33 @@
     </div>
 
     <template v-else>
-      <p
-        v-if="hasCurrentUser"
-        class="px-6 mb-6"
-      >
-        Welcome <span class="text-teal-700">{{ userName }}</span> to the workflow manager app.
-      </p>
+      <div class="px-6 mb-6">
+        <p v-if="hasCurrentUser">
+          Welcome <span class="text-teal-700">{{ userName }}</span> to the workflow manager app.
+        </p>
 
-      <div class="flex-1 px-6 mb-6 flex">
+        <Checkbox
+          v-model="onlyAssignedToMe"
+          label="View only stories assigned to me"
+          class="mt-2"
+        />
+      </div>
+
+      <div class="flex-1 px-6 mb-6 flex overflow-x-scroll">
         <div
           v-if="!hasData"
           class="flex justify-center items-center flex-col w-full"
         >
           <Message
-            type="info"
+            type="danger"
             message="There are no workflow stages configured"
           />
 
           <button
             @click="loadData"
-            class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mt-4"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
           >
-            Reload
+            Reload data
           </button>
         </div>
 
@@ -39,6 +50,7 @@
             :key="stage.id"
             :stage="stage"
             :space-id="spaceId"
+            @update="onUpdateStory"
           />
         </template>
       </div>
@@ -54,10 +66,20 @@ import AppFooter from '@/components/AppFooter'
 import Message from '@/components/Message'
 import Loading from '@/components/Loading'
 import BoardColumn from '@/components/BoardColumn'
+import Checkbox from '@/components/Checkbox'
+import Toast from '@/components/Toast'
+import copy from '../support/copy'
 
 export default {
   name: 'IndexPage',
-  components: { AppFooter, BoardColumn, Loading, Message },
+  components: {
+    AppFooter,
+    BoardColumn,
+    Loading,
+    Message,
+    Checkbox,
+    Toast
+  },
   data: () => ({
     spaceId: null,
     loading: true,
@@ -66,7 +88,9 @@ export default {
     hasWorkflowError: false,
     stories: [],
     workflowsProcessed: [],
-    currentUser: {}
+    currentUser: {},
+    onlyAssignedToMe: true,
+    workflowsCopy: []
   }),
   computed: {
     hasData () {
@@ -88,6 +112,9 @@ export default {
 
       return ''
     }
+  },
+  watch: {
+    onlyAssignedToMe: 'loadData'
   },
   mounted () {
     if (window.top === window.self) {
@@ -134,14 +161,14 @@ export default {
       const url = `/auth/explore/spaces/${this.spaceId}/stories`
       let page = 1
 
-      let res = await axios.get(url, { params: { page } })
+      let res = await axios.get(url, this.getStoriesConfig(page))
       const total = res.data.total
       const lastPage = Math.ceil((total / perPage))
       let all = res.data.stories
 
       while (page < lastPage) {
         page++
-        res = await axios.get(url, { params: { page } })
+        res = await axios.get(url, this.getStoriesConfig(page))
         all = [
           ...all,
           ...res.data.stories
@@ -170,7 +197,9 @@ export default {
         }
       }
 
-      this.workflowsProcessed = Object.values(workflowsProcessed)
+      const data = Object.values(workflowsProcessed)
+      this.workflowsProcessed = data
+      this.workflowsCopy = copy(data)
     },
     getUserInfo () {
       return axios
@@ -188,6 +217,43 @@ export default {
       this.hasUserError = false
       this.hasStoriesError = false
       this.hasWorkflowError = false
+    },
+    getStoriesConfig (page) {
+      const params = {
+        page
+      }
+
+      if (this.onlyAssignedToMe) {
+        params.mine = true
+      }
+
+      return { params }
+    },
+    onUpdateStory (stageId, story) {
+      const url = `/auth/explore/spaces/${this.spaceId}/workflow_stage_changes`
+
+      const data = {
+        workflow_stage_change: {
+          story_id: story.id,
+          workflow_stage_id: stageId
+        }
+      }
+
+      return axios.post(url, data)
+        .then(() => {
+          console.log(`Story ${story.id} updated to stage id ${stageId}`) // eslint-disable-line
+          this.workflowsCopy = copy(this.workflowsProcessed)
+        })
+        .catch((err) => {
+          if (err.response) {
+            // not authorized
+            if (err.response.status === 403) {
+              this.workflowsProcessed = copy(this.workflowsCopy)
+              this.$refs.toast.show()
+            }
+          }
+          console.error(err) // eslint-disable-line
+        })
     }
   }
 }
