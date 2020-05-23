@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
-    "@nuxtjs/dotenv": "^1.4.0",
     "@storyblok/nuxt-auth": "^1.2.0",
+    "dotenv": "^8.2.0",
     "nuxt": "^2.0.0",
     "vuedraggable": "^2.23.2"
   },
