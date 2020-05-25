@@ -1,12 +1,8 @@
 <template>
   <div
-    :class="`bg-${color}-100 text-${color}-700`"
-    class="px-3 h-6 rounded-full text-xs flex items-center"
+    class="px-3 h-6 rounded-full text-xs flex items-center bg-red-100 text-red-700"
   >
-    <span
-      :class="`bg-${color}-400`"
-      class="w-2 h-2 rounded-full mr-1"
-    />
+    <span class="w-2 h-2 rounded-full mr-1 bg-red-400"/>
 
     <span>
       <slot />
@@ -16,12 +12,6 @@
 
 <script>
 export default {
-  name: 'Badge',
-  props: {
-    color: {
-      type: String,
-      default: 'red'
-    }
-  }
+  name: 'Badge'
 }
 </script>

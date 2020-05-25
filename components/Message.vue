@@ -1,6 +1,10 @@
 <template>
   <div
-    :class="typeClass"
+    :class="
+      isDanger
+        ? 'border-red-700 bg-red-100 text-red-900'
+        : 'border-blue-700 bg-blue-100 text-blue-900'
+    "
     class="py-4 px-6 border border-t-4 rounded-b text-center text-lg shadow-md"
     role="alert"
   >
@@ -24,10 +28,8 @@ export default {
     }
   },
   computed: {
-    typeClass () {
-      const colorBase = this.type === 'danger' ? 'red' : 'blue'
-
-      return `border-${colorBase}-700 bg-${colorBase}-100 text-${colorBase}-900`
+    isDanger () {
+      return this.type === 'danger'
     }
   }
 }
