@@ -142,7 +142,7 @@ export default {
       this.loading = false
     },
     loadWorkflowStages () {
-      const url = `/auth/explore/spaces/${this.spaceId}/workflow_stages`
+      const url = `/auth/spaces/${this.spaceId}/workflow_stages`
 
       return axios
         .get(url)
@@ -158,7 +158,7 @@ export default {
     },
     async loadStories () {
       const perPage = 25
-      const url = `/auth/explore/spaces/${this.spaceId}/stories`
+      const url = `/auth/spaces/${this.spaceId}/stories`
       let page = 1
 
       let res = await axios.get(url, this.getStoriesConfig(page))
@@ -203,7 +203,7 @@ export default {
     },
     getUserInfo () {
       return axios
-        .get('/auth/user')
+        .get('/auth/user', {params: {space_id: this.loadSpaceIdFromUrl()}})
         .then((response) => {
           this.hasUserError = false
           this.currentUser = response.data
@@ -230,7 +230,7 @@ export default {
       return { params }
     },
     onUpdateStory (stageId, story) {
-      const url = `/auth/explore/spaces/${this.spaceId}/workflow_stage_changes`
+      const url = `/auth/spaces/${this.spaceId}/workflow_stage_changes`
 
       const data = {
         workflow_stage_change: {
