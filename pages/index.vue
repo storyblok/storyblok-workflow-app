@@ -2,20 +2,20 @@
   <div class="bg-white py-6 min-h-screen flex flex-col">
     <Toast
       ref="toast"
+      :message="errorMessage"
       type="danger"
-      message="You are not allowed to move this content item to this stage"
     />
 
     <div
       v-if="loading"
       class="flex flex-1 justify-center items-center"
     >
-      <Loading message="Loading Workflow Stages..." />
+      <Loading :message="loadingMessage" />
     </div>
 
     <template v-else>
-      <div class="px-6 mb-6">
-        <p v-if="hasCurrentUser">
+      <div v-if="hasCurrentUser" class="px-6 mb-6">
+        <p>
           Welcome <span class="text-teal-700">{{ userName }}</span> to the workflow manager app.
         </p>
 
@@ -37,8 +37,8 @@
           />
 
           <button
-            @click="loadData"
             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+            @click="loadData"
           >
             Reload data
           </button>
@@ -62,13 +62,13 @@
 
 <script>
 import axios from 'axios'
+import copy from '../support/copy'
 import AppFooter from '@/components/AppFooter'
 import Message from '@/components/Message'
 import Loading from '@/components/Loading'
 import BoardColumn from '@/components/BoardColumn'
 import Checkbox from '@/components/Checkbox'
 import Toast from '@/components/Toast'
-import copy from '../support/copy'
 
 export default {
   name: 'IndexPage',
@@ -90,7 +90,9 @@ export default {
     workflowsProcessed: [],
     currentUser: {},
     onlyAssignedToMe: true,
-    workflowsCopy: []
+    workflowsCopy: [],
+    errorMessage: '',
+    loadingMessage: 'Loading workflow stages...'
   }),
   computed: {
     hasData () {
@@ -131,15 +133,27 @@ export default {
     },
     async loadData () {
       this.clearErrors()
-
       this.loading = true
-      const workflows = await this.loadWorkflowStages()
-      this.stories = await this.loadStories()
-      await this.getUserInfo()
 
-      this.processStories(workflows, this.stories)
+      try {
+        // load workflow data
+        const workflows = await this.loadWorkflowStages()
 
-      this.loading = false
+        // load stories data
+        this.loadingMessage = 'Loading stories...'
+        this.stories = await this.loadStories()
+        this.processStories(workflows, this.stories)
+
+        // load user data
+        this.loadingMessage = 'Loading user information...'
+        await this.getUserInfo()
+        this.loading = false
+      } catch (e) {
+        console.error(e.message) // eslint-disable-line
+        this.errorMessage = 'An error ocurred when load data'
+        this.loading = false
+        this.$refs.toast.show()
+      }
     },
     loadWorkflowStages () {
       const url = `/auth/spaces/${this.spaceId}/workflow_stages`
@@ -203,7 +217,7 @@ export default {
     },
     getUserInfo () {
       return axios
-        .get('/auth/user', {params: {space_id: this.loadSpaceIdFromUrl()}})
+        .get(`/auth/user?space_id=${this.spaceId}`)
         .then((response) => {
           this.hasUserError = false
           this.currentUser = response.data
@@ -249,6 +263,7 @@ export default {
             // not authorized
             if (err.response.status === 403) {
               this.workflowsProcessed = copy(this.workflowsCopy)
+              this.errorMessage = 'You are not allowed to move this content item to this stage'
               this.$refs.toast.show()
             }
           }
