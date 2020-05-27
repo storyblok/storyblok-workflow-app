@@ -26,7 +26,7 @@
         />
       </div>
 
-      <div class="flex-1 px-6 mb-6 flex overflow-x-scroll">
+      <div class="flex-1 px-6 mb-6 flex">
         <div
           v-if="!hasData"
           class="flex justify-center items-center flex-col w-full"
