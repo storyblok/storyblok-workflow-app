@@ -180,7 +180,12 @@ export default {
       const lastPage = Math.ceil((total / perPage))
       let all = res.data.stories
 
-      while (page < lastPage) {
+      if (total > 1000) {
+        this.errorMessage = 'You have more than 1000 content items with assigned workflow stages. Only the first 1000 will be loaded.'
+        this.$refs.toast.show()
+      }
+
+      while (page < lastPage && page <= 40) {
         page++
         res = await axios.get(url, this.getStoriesConfig(page))
         all = [
