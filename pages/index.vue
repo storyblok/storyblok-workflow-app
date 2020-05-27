@@ -239,7 +239,8 @@ export default {
     },
     getStoriesConfig (page) {
       const params = {
-        page
+        page,
+        sort_by: 'updated_at:desc'
       }
 
       if (this.onlyAssignedToMe) {
