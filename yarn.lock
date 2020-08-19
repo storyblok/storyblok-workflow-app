@@ -1138,6 +1138,20 @@
     storyblok-js-client "^2.0.12"
     uuid "^3.4.0"
 
+"@storyblok/nuxt-auth@storyblok/nuxt-auth#feature/configurable-proxy-setting":
+  version "0.0.0-development"
+  resolved "https://codeload.github.com/storyblok/nuxt-auth/tar.gz/37721848422e3e4c02db059573beb0f4f2102045"
+  dependencies:
+    axios "^0.19.2"
+    axios-auth-refresh "^2.2.6"
+    crypto-js "^4.0.0"
+    express "^4.17.1"
+    express-session "^1.17.0"
+    grant-express "^4.7.0"
+    qs "^6.9.1"
+    storyblok-js-client "^2.0.12"
+    uuid "^3.4.0"
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
