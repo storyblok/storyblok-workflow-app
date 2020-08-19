@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
-    "@storyblok/nuxt-auth": "storyblok/nuxt-auth#feature/configurable-proxy-setting",
+    "@storyblok/nuxt-auth": "^1.3.4",
     "dotenv": "^8.2.0",
     "nuxt": "^2.0.0",
     "vuedraggable": "^2.23.2"

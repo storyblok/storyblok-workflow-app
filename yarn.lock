@@ -1123,24 +1123,10 @@
     mustache "^2.3.0"
     stack-trace "0.0.10"
 
-"@storyblok/nuxt-auth@^1.3.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@storyblok/nuxt-auth/-/nuxt-auth-1.3.2.tgz#9f1e9d5eea47a52f71c3b591f82e43e0876f3018"
-  integrity sha512-l4cdlrmurNNbI5wIUe3HLvLA5sfM2Av6eR6soyKmsr6YgM8dgcGTDgab7B83FbUBM2sl0/QiP9FyR5q2lycCVg==
-  dependencies:
-    axios "^0.19.2"
-    axios-auth-refresh "^2.2.6"
-    crypto-js "^4.0.0"
-    express "^4.17.1"
-    express-session "^1.17.0"
-    grant-express "^4.7.0"
-    qs "^6.9.1"
-    storyblok-js-client "^2.0.12"
-    uuid "^3.4.0"
-
-"@storyblok/nuxt-auth@storyblok/nuxt-auth#feature/configurable-proxy-setting":
-  version "0.0.0-development"
-  resolved "https://codeload.github.com/storyblok/nuxt-auth/tar.gz/37721848422e3e4c02db059573beb0f4f2102045"
+"@storyblok/nuxt-auth@^1.3.4":
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/@storyblok/nuxt-auth/-/nuxt-auth-1.3.4.tgz#5d7648588be05c152e4c441ce1b209aee16da700"
+  integrity sha512-RIjLIhNZRo6T8nqfGhXl5TqXKxgLaWvRMxcflsDbdTfRVzP+vSPMVC0sFgJPqns6mhJHfqVU8PfqNaM08YTuWA==
   dependencies:
     axios "^0.19.2"
     axios-auth-refresh "^2.2.6"
