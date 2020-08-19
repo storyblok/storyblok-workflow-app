@@ -1075,14 +1075,6 @@
     consola "^2.11.3"
     defu "^2.0.2"
 
-"@nuxtjs/dotenv@^1.4.0":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/dotenv/-/dotenv-1.4.1.tgz#dd5abb98e22cc7ae27139d3aa606151034293128"
-  integrity sha512-DpdObsvRwC8d89I9mzz6pBg6e/PEXHazDM57DOI1mmML2ZjHfQ/DvkjlSzUL7T+TnW3b/a4Ks5wQx08DqFBmeQ==
-  dependencies:
-    consola "^2.10.1"
-    dotenv "^8.1.0"
-
 "@nuxtjs/eslint-config@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@nuxtjs/eslint-config/-/eslint-config-3.0.0.tgz#34f4a4ad9133f0c7e64bbcd2ab5315a821d173a4"
@@ -1131,10 +1123,10 @@
     mustache "^2.3.0"
     stack-trace "0.0.10"
 
-"@storyblok/nuxt-auth@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@storyblok/nuxt-auth/-/nuxt-auth-1.3.0.tgz#440a3bdcbdf4f75cd436f29f7d18f36862e5fc02"
-  integrity sha512-He2jP217olGfo7w2mv1sMMGllwFpIUKN0uAylEu5ls1lGggt9otFthaunOr1cKPlQjodyOMLkxYZl4gqzO2Y7Q==
+"@storyblok/nuxt-auth@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@storyblok/nuxt-auth/-/nuxt-auth-1.3.2.tgz#9f1e9d5eea47a52f71c3b591f82e43e0876f3018"
+  integrity sha512-l4cdlrmurNNbI5wIUe3HLvLA5sfM2Av6eR6soyKmsr6YgM8dgcGTDgab7B83FbUBM2sl0/QiP9FyR5q2lycCVg==
   dependencies:
     axios "^0.19.2"
     axios-auth-refresh "^2.2.6"
@@ -3044,7 +3036,7 @@ dot-prop@^5.2.0:
   dependencies:
     is-obj "^2.0.0"
 
-dotenv@^8.1.0:
+dotenv@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
