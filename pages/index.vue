@@ -62,13 +62,13 @@
 
 <script>
 import axios from 'axios'
-import copy from '../support/copy'
 import AppFooter from '@/components/AppFooter'
 import Message from '@/components/Message'
 import Loading from '@/components/Loading'
 import BoardColumn from '@/components/BoardColumn'
 import Checkbox from '@/components/Checkbox'
 import Toast from '@/components/Toast'
+import copy from '../support/copy'
 
 export default {
   name: 'IndexPage',
