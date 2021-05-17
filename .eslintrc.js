@@ -15,6 +15,7 @@ module.exports = {
   rules: {
     // allow v-bind without use of a state variable
     // https://tailwindcss.com/docs/controlling-file-size/#writing-purgeable-html
-    'vue/valid-v-bind': 'off'
+    'vue/valid-v-bind': 'off',
+    'vue/comment-directive': 0
   }
 }
