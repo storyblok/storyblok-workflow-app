@@ -16,7 +16,7 @@
         "@nuxtjs/axios": "^5.13.1",
         "@storyblok/nuxt-auth": "^1.4.0",
         "dotenv": "^9.0.2",
-        "nuxt": "^2.15.6",
+        "nuxt": "^3.4.3",
         "vuedraggable": "^2.24.3"
     },
     "devDependencies": {
